@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+    <head>
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>RESUME</title>
+        <link rel="stylesheet" href="style.css">
+        <script src="https://www.gstatic.com/firebasejs/8.9.0/firebase-app.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/8.9.0/firebase-auth.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/8.9.0/firebase-database.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/8.9.0/firebase-analytics.js"></script>
+    </head>
+
+    <body>
+      
+    <div class="banner_1">
+
+        <div class="background">
+            <div class="shape"></div>
+            <div class="shape"></div>
+        </div>
+        <div class="form-holder_1">
+            <h3>Signin Here</h3>
+            
+        
+            <label for="email">Email id</label>
+            <input type="text" id="email_id">
+    
+            <label for="password">Password</label>
+            <input type="password"  id="password">
+
+
+    
+            <button id="signin"><span></span><h2>Sign in</h2></button>
+        </div>
+    </div>
+        <style>
+          .form-holder_1{
+            height: 400px;
+            width: 400px;
+            background-color:rgba(7, 6, 9, 0.6);
+            position: absolute;
+            transform: translate(-50%,-50%);
+            top: 50%;
+            left: 50%;
+            border-radius: 10px;
+            backdrop-filter: blur(1px);
+            border: 2px solid rgba(255,255,255,0.1);
+            box-shadow: 0 0 40px rgba(8,7,16,0.6);
+            padding: 50px 35px;
+        }
+        .form-holder_1 *{
+            font-family: 'Poppins',sans-serif;
+            color: #ffffff;
+            letter-spacing: 0.5px;
+            outline: none;
+            border: none;
+        }
+        .form-holder_1 h3{
+            font-size: 32px;
+            font-weight: 500;
+            line-height: 42px;
+            text-align: center;
+        }
+
+        label{
+            display: block;
+            margin-top: 30px;
+            font-size: 16px;
+            font-weight: 500;
+        }
+        input{
+            display: block;
+            height: 50px;
+            width: 100%;
+            background-color: rgba(255,255,255,0.07);
+            border-radius: 3px;
+            padding: 0 10px;
+            margin-top: 8px;
+            font-size: 14px;
+            font-weight: 300;
+        }
+        ::placeholder{
+            color: #e5e5e5;
+        }
+        </style>
+
+
+
+        <script>
+            
+            const firebaseConfig = {
+            apiKey: "AIzaSyCWYZxcRcK0ohsr465bnUufwLekND1EGPU",
+            authDomain: "resume-parser-913c4.firebaseapp.com",
+            projectId: "resume-parser-913c4",
+            storageBucket: "resume-parser-913c4.appspot.com",
+            messagingSenderId: "468299074766",
+            appId: "1:468299074766:web:6088d4ec71cb6fe55f549f",
+            measurementId: "G-59QNMLQ7XM",
+            databaseURL: "https://resume-parser-913c4-default-rtdb.firebaseio.com"
+
+            
+            };
+
+            firebase.initializeApp(firebaseConfig);
+            const auth = firebase.auth();
+            firebase.analytics();
+            const database = firebase.database();
+            
+
+            document.getElementById("signin").addEventListener("click",function(){
+                var email = document.getElementById("email_id").value;
+                var password = document.getElementById("password").value;
+                
+
+                console.log(email);
+                console.log(password);
+
+                    auth.signInWithEmailAndPassword(email, password)
+                    .then(function() {
+                        var user = auth.currentUser
+                        var database_ref = database.ref()
+                        var user_data = {
+                            last_login : Date.now()
+                        }
+
+                        database_ref.child('users/' + user.id).update(user_data)
+                        .then(()=>{
+                            alert("Logged in Successfully...")
+                            window.location.assign("applicant_interface.html");
+                        })
+                        .catch((err)=>{
+                            alert("Data add failed")
+                        })
+                    })
+
+                    .catch((error) => {
+                        const errorCode = error.code;
+                        const errorMessage = error.message;
+                        console.log(error);
+                        alert(error);
+                    });
+                
+            });
+
+        </script>
+
+
+    </body>
+</html>
